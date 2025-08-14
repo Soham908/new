@@ -29,6 +29,7 @@ export const createNexrenderJob = async (jobPayload) => {
 
 // Get job status by ID
 export const getJobStatus = async (jobId) => {
+    console.log('job status fetched')
   return request(`/jobs/${jobId}`, {
     method: 'GET',
   });
@@ -46,9 +47,13 @@ export const buildJobPayloadFromForm = ({ plan, userName, amount, tenure }) => {
   return {
     preview: false, // set true for faster test renders
     template: {
-      id: '01K2GX4X69PT5JNMP4F7ERHEWC', // your template ID
+      id: '01K2MFCW20CFAWHF5JZ96287FX', // your template ID
       composition: 'MainComp'
     },
+    fonts: [
+      "Montserrat-SemiBold.ttf",
+      "Montserrat-Medium.ttf",
+    ],
     assets: [
       // Images (ensure correct layer names and file-type expectations)
       {
@@ -64,37 +69,43 @@ export const buildJobPayloadFromForm = ({ plan, userName, amount, tenure }) => {
       // Text
       {
         type: 'data',
-        layerName: 'CustomerNameSlide2',
+        layerName: 'CustomerName',
         property: 'Source Text',
         value: `Welcome ${userName}`
       },
       {
         type: 'data',
-        layerName: 'CustomerNameSlide2',
+        layerName: 'CustomerName',
         property: 'Source Text.font',
         value: 'Montserrat-SemiBold'
       },
       {
         type: 'data',
-        layerName: 'GiveTerms',
+        layerName: 'GiveAmount',
         property: 'Source Text',
         value: `₹${Number(amount).toLocaleString()}`
       },
       {
         type: 'data',
-        layerName: 'GetTerms',
+        layerName: 'GiveStatement',
+        property: 'Source Text',
+        value: `Pay total ₹${Number(amount * tenure).toLocaleString()} over the premium term of ${tenure} years`
+      },
+      {
+        type: 'data',
+        layerName: 'GetAmount',
         property: 'Source Text',
         value: `₹${Number(amount * tenure).toLocaleString()}`
       },
       {
         type: 'data',
-        layerName: 'ReturnTerms',
+        layerName: 'ReturnPremium',
         property: 'Source Text',
         value: `Return of Premium of ₹${Number(amount * tenure * 19).toLocaleString()} Lakhs on ${tenure} years`
       },
       {
         type: 'data',
-        layerName: 'ThankYouSlide3',
+        layerName: 'ThankYouName',
         property: 'Source Text',
         value: `Thank you ${userName} for selecting this investment plan`
       }
