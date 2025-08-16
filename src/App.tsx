@@ -39,7 +39,7 @@ function App() {
     error: pollingError
   } = useQuery({
     queryKey: ['job-status', jobId],
-    queryFn: () => getJobStatus(jobId),
+    queryFn: () => getJobStatus(jobId!),
     enabled: !!jobId, // Only run when we have a jobId
     refetchInterval: (query: any) => {
       const data = query.state.data;
