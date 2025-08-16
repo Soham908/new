@@ -87,6 +87,12 @@ export const buildJobPayloadFromForm = ({ plan, userName, amount, tenure }) => {
       },
       {
         type: 'data',
+        layerName: 'GiveTenure',
+        property: 'Source Text',
+        value: `For ${tenure} years`
+      },
+      {
+        type: 'data',
         layerName: 'GiveStatement',
         property: 'Source Text',
         value: `Pay total ₹${Number(amount * tenure).toLocaleString()} over the premium term of ${tenure} years`
@@ -101,13 +107,13 @@ export const buildJobPayloadFromForm = ({ plan, userName, amount, tenure }) => {
         type: 'data',
         layerName: 'ReturnPremium',
         property: 'Source Text',
-        value: `Return of Premium of ₹${Number(amount * tenure * 19).toLocaleString()} Lakhs on ${tenure} years`
+        value: `Return of Premium of ₹${Number(amount * tenure).toLocaleString()} Lakhs on ${tenure} years`
       },
       {
         type: 'data',
         layerName: 'ThankYouName',
         property: 'Source Text',
-        value: `Thank you ${userName} for selecting this investment plan`
+        value: `${userName}`
       }
     ]
   };
