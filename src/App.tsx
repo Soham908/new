@@ -23,10 +23,10 @@ function App() {
   // Job creation mutation
   const createJobMutation = useMutation({
     mutationFn: createNexrenderJob,
-    onSuccess: (data) => {
+    onSuccess: (data: any) => {
       setJobId(data.id);
     },
-    onError: (error) => {
+    onError: (error: any) => {
       console.error('Error submitting job:', error);
       alert('Failed to submit request. Please try again.');
     }
@@ -41,7 +41,7 @@ function App() {
     queryKey: ['job-status', jobId],
     queryFn: () => getJobStatus(jobId),
     enabled: !!jobId, // Only run when we have a jobId
-    refetchInterval: (query) => {
+    refetchInterval: (query: any) => {
       const data = query.state.data;
       // Stop polling if finished or failed
       if (data?.status === 'finished' || data?.status === 'failed') {
@@ -51,7 +51,7 @@ function App() {
       return 2000;
     },
     refetchIntervalInBackground: false,
-    retry: (failureCount, error) => {
+    retry: (failureCount: any, error: any) => {
       // Retry up to 3 times for network errors, but not for 404s
       return failureCount < 3 && error?.status !== 404;
     }
@@ -68,15 +68,15 @@ function App() {
   const progress = jobData?.progress || 0;
   const videoUrl = jobData?.outputUrl;
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: any) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev: any) => ({
       ...prev,
       [name]: name === 'amount' || name === 'tenure' ? Number(value) : value
     }));
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
     if (!formData.plan || !formData.userName) {
       alert('Please fill in all required fields');
