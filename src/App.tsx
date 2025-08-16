@@ -1,27 +1,23 @@
 // App.js
-import { useState } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import "./App.css";
-import {
-  createNexrenderJob,
-  getJobStatus,
-  buildJobPayloadFromForm,
-} from "../nexrender.js";
+import { useState } from 'react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import './App.css';
+import { createNexrenderJob, getJobStatus, buildJobPayloadFromForm } from './nexrender.ts';
 
 function App() {
   const [formData, setFormData] = useState({
-    plan: "",
-    userName: "",
+    plan: '',
+    userName: '',
     amount: 10000,
-    tenure: 5,
+    tenure: 5
   });
   const [jobId, setJobId] = useState(null);
 
   const queryClient = useQueryClient();
 
   const plans = [
-    { id: "plan1", name: "HDFC Sanchay Plan", logo: "Logo_HDFC_Sanchay.png" },
-    { id: "plan2", name: "HDFC Jeevan Plan", logo: "Logo_HDFC_Jeevan.png" },
+    { id: 'plan1', name: 'HDFC Sanchay Plan', logo: 'Logo_HDFC_Sanchay.png' },
+    { id: 'plan2', name: 'HDFC Jeevan Plan', logo: 'Logo_HDFC_Jeevan.png' }
   ];
 
   // Job creation mutation
@@ -31,24 +27,24 @@ function App() {
       setJobId(data.id);
     },
     onError: (error: any) => {
-      console.error("Error submitting job:", error);
-      alert("Failed to submit request. Please try again.");
-    },
+      console.error('Error submitting job:', error);
+      alert('Failed to submit request. Please try again.');
+    }
   });
 
   // Job status polling query with smart interval
   const {
     data: jobData,
     isLoading: isPolling,
-    error: pollingError,
+    error: pollingError
   } = useQuery({
-    queryKey: ["job-status", jobId],
+    queryKey: ['job-status', jobId],
     queryFn: () => getJobStatus(jobId),
     enabled: !!jobId, // Only run when we have a jobId
     refetchInterval: (query: any) => {
       const data = query.state.data;
       // Stop polling if finished or failed
-      if (data?.status === "finished" || data?.status === "failed") {
+      if (data?.status === 'finished' || data?.status === 'failed') {
         return false;
       }
       // Poll every 2 seconds for active jobs
@@ -58,19 +54,16 @@ function App() {
     retry: (failureCount: any, error: any) => {
       // Retry up to 3 times for network errors, but not for 404s
       return failureCount < 3 && error?.status !== 404;
-    },
+    }
   });
 
   // Derived state from query data
-  const isProcessing =
-    createJobMutation.isPending ||
-    (jobId && jobData?.status !== "finished" && jobData?.status !== "failed");
+  const isProcessing = createJobMutation.isPending ||
+    (jobId && jobData?.status !== 'finished' && jobData?.status !== 'failed');
 
-  const jobStatus = createJobMutation.isPending
-    ? "submitted"
-    : createJobMutation.isError
-    ? "failed"
-    : jobData?.status || (jobId ? "queued" : "idle");
+  const jobStatus = createJobMutation.isPending ? 'submitted' :
+    createJobMutation.isError ? 'failed' :
+      jobData?.status || (jobId ? 'queued' : 'idle');
 
   const progress = jobData?.progress || 0;
   const videoUrl = jobData?.outputUrl;
@@ -79,14 +72,14 @@ function App() {
     const { name, value } = e.target;
     setFormData((prev: any) => ({
       ...prev,
-      [name]: name === "amount" || name === "tenure" ? Number(value) : value,
+      [name]: name === 'amount' || name === 'tenure' ? Number(value) : value
     }));
   };
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     if (!formData.plan || !formData.userName) {
-      alert("Please fill in all required fields");
+      alert('Please fill in all required fields');
       return;
     }
 
@@ -95,32 +88,26 @@ function App() {
   };
 
   const resetForm = () => {
-    setFormData({ plan: "", userName: "", amount: 10000, tenure: 5 });
+    setFormData({ plan: '', userName: '', amount: 10000, tenure: 5 });
     setJobId(null);
     // Clear the job status query cache
-    queryClient.removeQueries({ queryKey: ["job-status"] });
+    queryClient.removeQueries({ queryKey: ['job-status'] });
   };
 
   const manualCheckStatus = () => {
     if (jobId) {
-      queryClient.invalidateQueries({ queryKey: ["job-status", jobId] });
+      queryClient.invalidateQueries({ queryKey: ['job-status', jobId] });
     }
   };
 
   const getStatusMessage = () => {
     switch (jobStatus) {
-      case "submitted":
-        return "Submitting request...";
-      case "queued":
-        return "Video queued for processing...";
-      case "rendering":
-        return "Processing video...";
-      case "finished":
-        return "Video ready!";
-      case "failed":
-        return "Processing failed. Please try again.";
-      default:
-        return "";
+      case 'submitted': return 'Submitting request...';
+      case 'queued': return 'Video queued for processing...';
+      case 'rendering': return 'Processing video...';
+      case 'finished': return 'Video ready!';
+      case 'failed': return 'Processing failed. Please try again.';
+      default: return '';
     }
   };
 
@@ -142,21 +129,19 @@ function App() {
                 disabled={isProcessing || createJobMutation.isPending}
               >
                 <option value="">Choose a plan...</option>
-                {plans.map((plan) => (
-                  <option key={plan.id} value={plan.id}>
-                    {plan.name}
-                  </option>
+                {plans.map(plan => (
+                  <option key={plan.id} value={plan.id}>{plan.name}</option>
                 ))}
               </select>
 
               {formData.plan && (
                 <div className="plan-preview">
                   <img
-                    src={plans.find((p) => p.id === formData.plan)?.logo}
+                    src={plans.find(p => p.id === formData.plan)?.logo}
                     alt="Plan logo"
                     className="plan-logo"
                   />
-                  <p>{plans.find((p) => p.id === formData.plan)?.name}</p>
+                  <p>{plans.find(p => p.id === formData.plan)?.name}</p>
                 </div>
               )}
             </div>
@@ -176,9 +161,7 @@ function App() {
             </div>
 
             <div className="form-group">
-              <label htmlFor="amount">
-                Investment Amount: ₹{formData.amount.toLocaleString()}
-              </label>
+              <label htmlFor="amount">Investment Amount: ₹{formData.amount.toLocaleString()}</label>
               <input
                 type="range"
                 id="amount"
@@ -198,9 +181,7 @@ function App() {
             </div>
 
             <div className="form-group">
-              <label htmlFor="tenure">
-                Investment Tenure: {formData.tenure} years
-              </label>
+              <label htmlFor="tenure">Investment Tenure: {formData.tenure} years</label>
               <input
                 type="range"
                 id="tenure"
@@ -224,29 +205,21 @@ function App() {
               className="submit-btn"
               disabled={isProcessing || createJobMutation.isPending}
             >
-              {createJobMutation.isPending
-                ? "Submitting..."
-                : isProcessing
-                ? "Processing..."
-                : "Generate Video"}
+              {createJobMutation.isPending ? 'Submitting...' :
+                isProcessing ? 'Processing...' :
+                  'Generate Video'}
             </button>
           </form>
         </div>
 
-        {(isProcessing ||
-          jobStatus === "finished" ||
-          jobStatus === "failed") && (
+        {(isProcessing || jobStatus === 'finished' || jobStatus === 'failed') && (
           <div className="status-section">
             <h3>Video Processing Status</h3>
             <div className={`status-indicator ${jobStatus}`}>
               <div className="status-icon">
-                {jobStatus === "finished"
-                  ? "✅"
-                  : jobStatus === "failed"
-                  ? "❌"
-                  : isPolling
-                  ? "🔄"
-                  : "⏳"}
+                {jobStatus === 'finished' ? '✅' :
+                  jobStatus === 'failed' ? '❌' :
+                    isPolling ? '🔄' : '⏳'}
               </div>
               <div className="status-text">
                 {getStatusMessage()}
@@ -257,10 +230,7 @@ function App() {
             {isProcessing && (
               <div className="progress-container">
                 <div className="progress-bar">
-                  <div
-                    className="progress-fill"
-                    style={{ width: `${progress}%` }}
-                  ></div>
+                  <div className="progress-fill" style={{ width: `${progress}%` }}></div>
                 </div>
                 <div className="progress-text">{progress}% Complete</div>
               </div>
@@ -278,14 +248,14 @@ function App() {
           </div>
         )}
 
-        {videoUrl && jobStatus === "finished" && (
+        {videoUrl && jobStatus === 'finished' && (
           <div className="video-section">
             <h3>Your Personalized Video is Ready!</h3>
             <video
               autoPlay
               controls
               width="100%"
-              style={{ maxWidth: "800px", borderRadius: "8px" }}
+              style={{ maxWidth: '800px', borderRadius: '8px' }}
             >
               <source src={videoUrl} type="video/mp4" />
               Your browser does not support the video tag.
