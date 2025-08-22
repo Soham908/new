@@ -339,3 +339,19 @@ h1 {
     max-width: 200px;
   }
 }
+
+.input-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.input-row .form-group {
+  flex: 1 1 100%;
+}
+
+@media (min-width: 600px) {
+  .input-row .form-group {
+    flex: 1 1 0;
+  }
+}

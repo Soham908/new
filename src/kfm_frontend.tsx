@@ -149,42 +149,41 @@ function KFM_Frontend() {
               )}
             </div> */}
 
-            <div style={{ display: 'flex', gap: 50 }}>
+                      <div className="input-row">
+                          <div className="form-group">
+                              <label htmlFor="userName">Your Name *</label>
+                              <input
+                                  type="text"
+                                  id="userName"
+                                  name="userName"
+                                  value={formData.userName}
+                                  onChange={handleInputChange}
+                                  placeholder="Enter your name"
+                                  required
+                                  disabled={isProcessing || createJobMutation.isPending}
+                              />
+                          </div>
 
-              <div className="form-group" style={{ flex: 1 }}>
-                <label htmlFor="userName">Your Name *</label>
-                <input
-                  type="text"
-                  id="userName"
-                  name="userName"
-                  value={formData.userName}
-                  onChange={handleInputChange}
-                  placeholder="Enter your name"
-                  required
-                  disabled={isProcessing || createJobMutation.isPending}
-                />
-              </div>
-
-              <div className="form-group" style={{ flex: 1 }}>
-                <label htmlFor="childName">Your Child's Name *</label>
-                <input
-                  type="text"
-                  id="childName"
-                  name="childName"
-                  value={formData.childName}
-                  onChange={handleInputChange}
-                  placeholder="Enter your child's name"
-                  required
-                  disabled={isProcessing || createJobMutation.isPending}
-                />
-              </div>
-
-            </div>
+                          <div className="form-group">
+                              <label htmlFor="childName">Your Child's Name *</label>
+                              <input
+                                  type="text"
+                                  id="childName"
+                                  name="childName"
+                                  value={formData.childName}
+                                  onChange={handleInputChange}
+                                  placeholder="Enter your child's name"
+                                  required
+                                  disabled={isProcessing || createJobMutation.isPending}
+                              />
+                          </div>
+                      </div>
 
 
-            <div style={{ display: 'flex', gap: 50 }}>
 
-              <div className="form-group" style={{flex: 1}}>
+
+                      <div className="input-row">
+                          <div className="form-group">
                 <label htmlFor="tenure">Client Age: {formData.clientAge} years</label>
                 <input
                   type="range"
