@@ -211,7 +211,7 @@ function KFM_Frontend() {
                   id="tenure"
                   name="tenure"
                   min="8"
-                  max="16"
+                  max="20"
                   step="1"
                   value={formData.tenure}
                   onChange={handleInputChange}
@@ -267,7 +267,7 @@ function KFM_Frontend() {
               <div className="status-icon">
                 {jobStatus === 'finished' ? '✅' :
                   jobStatus === 'failed' ? '❌' :
-                    isPolling ? '🔄' : '⏳'}
+                    isPolling ? '🔄' : <img style={{ width: 40 }} src='HourGlassLoading.gif'/>}
               </div>
               <div className="status-text">
                 {getStatusMessage()}

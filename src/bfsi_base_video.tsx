@@ -218,7 +218,7 @@ function BFSI_Base_Video() {
               <div className="status-icon">
                 {jobStatus === 'finished' ? '✅' :
                   jobStatus === 'failed' ? '❌' :
-                    isPolling ? '🔄' : '⏳'}
+                    isPolling ? '🔄' : <img style={{ width: 40 }} src='HourGlassLoading.gif'/>}
               </div>
               <div className="status-text">
                 {getStatusMessage()}
