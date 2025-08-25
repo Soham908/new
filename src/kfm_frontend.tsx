@@ -1,8 +1,7 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import './App.css';
 import { buildJobPayloadFromForm, createNexrenderJob, getJobStatus } from './kfm_render.ts';
-// import { createNexrenderJob, getJobStatus, buildJobPayloadFromForm } from './nexrender.ts';
 
 function KFM_Frontend() {
   const [formData, setFormData] = useState({
@@ -16,11 +15,8 @@ function KFM_Frontend() {
   const [jobId, setJobId] = useState(null);
 
   const queryClient = useQueryClient();
+  const titleRef = useRef<HTMLHeadingElement>(null);
 
-  // const plans = [
-  //   { id: 'plan1', name: 'HDFC Sanchay Plan', logo: 'Logo_HDFC_Sanchay.png' },
-  //   { id: 'plan2', name: 'HDFC Jeevan Plan', logo: 'Logo_HDFC_Jeevan.png' }
-  // ];
 
   // Job creation mutation
   const createJobMutation = useMutation({
@@ -90,6 +86,13 @@ function KFM_Frontend() {
   };
 
   const resetForm = () => {
+    if (titleRef.current) {
+      titleRef.current.scrollIntoView({ 
+        behavior: 'smooth',
+        block: 'center' // Centers the element in view
+      });
+    }
+
     setFormData({ plan: '', userName: '', amount: 100000, tenure: 10, childName: '', clientAge: 30 });
     setJobId(null);
     // Clear the job status query cache
@@ -116,7 +119,7 @@ function KFM_Frontend() {
   return (
     <div className="app">
       <div className="container">
-        <h1>Life Goal Maximizer Personalized Video</h1>
+        <h1 ref={titleRef}>Life Goal Maximizer Personalized Video</h1>
 
         <div className="form-section">
           <form onSubmit={handleSubmit}>
